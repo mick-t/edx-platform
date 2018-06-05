@@ -10,7 +10,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from edx_rest_framework_extensions.permissions import JWTRestrictedApplicationPermission
+from edx_rest_framework_extensions.permissions import HasScopedToken
 from edx_rest_framework_extensions.authentication import JwtAuthentication
 from openedx.core.lib.api.authentication import OAuth2AuthenticationAllowInactiveUser
 from courseware.access import has_access
@@ -163,16 +163,10 @@ class UserGradeView(GradeViewMixin, GenericAPIView):
         }]
 
     """
-    authentication_classes = (
-        JwtAuthentication,
-        OAuth2AuthenticationAllowInactiveUser,
+    permission_classes = (
+        IsAuthenticated,
+        HasScopedToken,
     )
-    permission_classes = (IsAuthenticated, JWTRestrictedApplicationPermission,)
-
-    # needed for passing JWTRestrictedApplicationPermission checks
-    # for RestrictedApplications (only). A RestrictedApplication can
-    # only call this method if it is allowed to receive a 'grades:read'
-    # scope
     required_scopes = ['grades:read']
 
     def get(self, request, course_id):

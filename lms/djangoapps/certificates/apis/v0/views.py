@@ -2,7 +2,7 @@
 import logging
 
 from edx_rest_framework_extensions.authentication import JwtAuthentication
-from edx_rest_framework_extensions.permissions import JWTRestrictedApplicationPermission
+from edx_rest_framework_extensions.permissions import HasScopedToken
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 from rest_framework.generics import GenericAPIView
@@ -78,7 +78,7 @@ class CertificatesDetailView(GenericAPIView):
     )
     permission_classes = (
         IsAuthenticated,
-        JWTRestrictedApplicationPermission
+        HasScopedToken,
     )
 
     def get(self, request, username, course_id):
