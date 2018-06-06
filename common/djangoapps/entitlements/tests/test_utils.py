@@ -9,10 +9,15 @@ from django.conf import settings
 from django.utils.timezone import now
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 
-from course_modes.models import CourseMode
-from course_modes.tests.factories import CourseModeFactory
+from common.djangoapps.course_modes.models import CourseMode
+from common.djangoapps.course_modes.tests.factories import CourseModeFactory
 from openedx.core.djangolib.testing.utils import skip_unless_lms
-from student.tests.factories import (TEST_PASSWORD, UserFactory, CourseOverviewFactory, CourseEnrollmentFactory)
+from common.djangoapps.student.tests.factories import (
+    TEST_PASSWORD,
+    UserFactory,
+    CourseOverviewFactory,
+    CourseEnrollmentFactory
+)
 
 # Entitlements is not in CMS' INSTALLED_APPS so these imports will error during test collection
 if settings.ROOT_URLCONF == 'lms.urls':
