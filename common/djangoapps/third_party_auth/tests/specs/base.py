@@ -597,7 +597,6 @@ class IntegrationTest(testutil.TestCase, test.TestCase):
             pipeline.get_login_url(self.provider.provider_id, pipeline.AUTH_ENTRY_LOGIN))
         actions.do_complete(request.backend, social_views._do_login)  # pylint: disable=protected-access
 
-        student_views.signin_user(strategy.request)
         student_views.login_user(strategy.request)
         actions.do_complete(request.backend, social_views._do_login)  # pylint: disable=protected-access
 
