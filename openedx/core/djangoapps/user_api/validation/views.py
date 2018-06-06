@@ -5,6 +5,7 @@ An API for client-side validation of (potential) user data.
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.throttling import AnonRateThrottle
 
 from openedx.core.djangoapps.user_api.accounts.api import (
     get_email_validation_error,
@@ -16,6 +17,19 @@ from openedx.core.djangoapps.user_api.accounts.api import (
     get_username_validation_error,
     get_username_existence_validation_error
 )
+
+REQUESTS_PER_MINUTE = 30
+
+
+class RegistrationValidationThrottle(AnonRateThrottle):
+    """
+    Custom throttle rate for /api/user/v1/validation/registration
+    endpoint's use case.
+    """
+
+    def __init__(self):
+        self.rate = '{}/minute'.format(REQUESTS_PER_MINUTE)
+        super(RegistrationValidationThrottle, self).__init__()
 
 
 class RegistrationValidationView(APIView):
@@ -106,6 +120,7 @@ class RegistrationValidationView(APIView):
 
     # This end-point is available to anonymous users, so no authentication is needed.
     authentication_classes = []
+    throttle_classes = (RegistrationValidationThrottle,)
 
     def name_handler(self, request):
         name = request.data.get('name')
